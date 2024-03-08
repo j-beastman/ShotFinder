@@ -1,0 +1,509 @@
+PERIOD,ELAPSED_SECS,ACTIONS
+1,0,Jump Ball Johnson vs. Lopez: Tip to Young
+1,28,Sullinger Bad Pass Turnover (P1.T1)
+1,47,Bradley REBOUND (Off:0 Def:1)
+1,59,Sullinger Offensive Charge Foul (P1.T1) (K.Fitzgerald)
+1,59,Sullinger Foul Turnover (P2.T2)
+1,91,MISS Thomas 25' 3PT Jump Shot
+1,99,Sullinger BLOCK (1 BLK)
+1,100,Crowder REBOUND (Off:0 Def:1)
+1,116,MISS Crowder 19' Pullup Jump Shot
+1,122,CELTICS Timeout: Regular (Full 1 Short 0)
+1,137,MISS Thomas 18' Jump Shot
+1,146,Johnson P.FOUL (P1.T2) (Z.Zarba)
+1,173,Bradley 20' Jump Shot (2 PTS) (Crowder 1 AST)
+1,180,Bradley P.FOUL (P1.T3) (K.Fitzgerald)
+1,185,Crowder S.FOUL (P1.T4) (Z.Zarba)
+1,194,MISS Bradley 21' Jump Shot
+1,195,Johnson REBOUND (Off:1 Def:0)
+1,195,Johnson  Putback Dunk (2 PTS)
+1,213,Crowder REBOUND (Off:0 Def:2)
+1,215,Crowder Free Throw 1 of 2 (1 PTS)
+1,215,Crowder Free Throw 2 of 2 (2 PTS)
+1,235,Johnson BLOCK (1 BLK)
+1,236,Johnson BLOCK (2 BLK)
+1,237,Crowder REBOUND (Off:0 Def:3)
+1,249,Crowder 2' Driving Finger Roll Layup (4 PTS) (Thomas 1 AST)
+1,268,Thomas REBOUND (Off:0 Def:1)
+1,282,Sullinger 21' Jump Shot (2 PTS) (Crowder 2 AST)
+1,291,Johnson S.FOUL (P2.PN) (K.Fitzgerald)
+1,309,MISS Sullinger 3' Layup
+1,310,Sullinger REBOUND (Off:1 Def:0)
+1,311,Sullinger 2' Putback Layup (4 PTS)
+1,333,Sullinger REBOUND (Off:1 Def:1)
+1,339,Thomas 26' 3PT Pullup Jump Shot (3 PTS)
+1,370,Crowder 26' 3PT Jump Shot (7 PTS) (Thomas 2 AST)
+1,396,MISS Bradley 26' 3PT Jump Shot
+1,397,Johnson REBOUND (Off:2 Def:0)
+1,397,Johnson  Putback Dunk (4 PTS)
+1,426,MISS Crowder 6' Jump Shot
+1,427,SUB: Olynyk FOR Johnson
+1,427,SUB: Turner FOR Bradley
+1,477,Sullinger 25' 3PT Jump Shot (7 PTS) (Crowder 3 AST)
+1,494,Sullinger STEAL (1 STL)
+1,500,Olynyk 1' Alley Oop Layup (2 PTS) (Thomas 3 AST)
+1,523,Sullinger REBOUND (Off:1 Def:2)
+1,531,Thomas 1' Driving Finger Roll Layup (5 PTS)
+1,532,SUB: Zeller FOR Sullinger
+1,561,MISS Thomas 26' 3PT Jump Shot
+1,591,MISS Zeller 20' Jump Shot
+1,604,Olynyk REBOUND (Off:0 Def:1)
+1,611,Thomas Bad Pass Turnover (P1.T3)
+1,630,SUB: Smart FOR Thomas
+1,630,SUB: Jerebko FOR Crowder
+1,641,Jerebko Free Throw 1 of 2 (1 PTS)
+1,641,Jerebko Free Throw 2 of 2 (2 PTS)
+1,658,Jerebko REBOUND (Off:0 Def:1)
+1,666,MISS Turner 20' Jump Shot
+1,679,Olynyk Offensive Charge Foul (P1.PN) (Z.Zarba)
+1,679,Olynyk Foul Turnover (P1.T4)
+1,682,Smart Personal Block Foul (P1.PN) (K.Fitzgerald)
+1,695,MISS Zeller 9' Jump Shot
+1,716,Olynyk REBOUND (Off:0 Def:2)
+1,719,MISS Smart 29' 3PT Jump Shot
+1,720,CELTICS Rebound
+2,733,MISS Zeller Free Throw 1 of 2
+2,733,CELTICS Rebound
+2,733,Zeller Free Throw 2 of 2 (1 PTS)
+2,763,Olynyk 8' Jump Shot (4 PTS)
+2,776,SUB: Bradley FOR Olynyk
+2,790,MISS Zeller 20' Jump Shot
+2,792,Bradley REBOUND (Off:1 Def:1)
+2,799,MISS Smart 9' Jump Shot
+2,801,Smart REBOUND (Off:1 Def:0)
+2,805,MISS Jerebko 13' Jump Shot
+2,817,Zeller S.FOUL (P1.T1) (K.Fitzgerald)
+2,825,Turner Free Throw 1 of 2 (1 PTS)
+2,825,Turner Free Throw 2 of 2 (2 PTS)
+2,856,MISS Bradley 25' 3PT Jump Shot
+2,858,Jerebko REBOUND (Off:1 Def:1)
+2,863,Zeller Free Throw 1 of 2 (2 PTS)
+2,863,Zeller Free Throw 2 of 2 (3 PTS)
+2,890,Turner  Driving Finger Roll Layup (4 PTS)
+2,903,Jerebko REBOUND (Off:1 Def:2)
+2,910,MISS Turner 25' 3PT Jump Shot
+2,921,Zeller BLOCK (1 BLK)
+2,922,Zeller REBOUND (Off:0 Def:1)
+2,928,MISS Jerebko 25' 3PT Jump Shot
+2,929,Zeller REBOUND (Off:1 Def:1)
+2,930,Zeller Step Out of Bounds Turnover (P1.T5)
+2,930,SUB: Sullinger FOR Zeller
+2,968,Bradley Bad Pass Turnover (P1.T6)
+2,980,CELTICS Timeout: Short (Full 1 Short 1)
+2,980,SUB: Johnson FOR Jerebko
+2,980,SUB: Thomas FOR Bradley
+2,989,MISS Thomas 18' Pullup Jump Shot
+2,990,Johnson REBOUND (Off:3 Def:0)
+2,990,Johnson  Putback Dunk (6 PTS)
+2,1008,SUB: Crowder FOR Turner
+2,1033,MISS Sullinger 1' Layup
+2,1034,Sullinger REBOUND (Off:2 Def:2)
+2,1034,MISS Sullinger 2' Tip Layup Shot
+2,1036,Crowder REBOUND (Off:1 Def:3)
+2,1042,Sullinger Offensive Charge Foul (P2.T2) (Z.Zarba)
+2,1042,Sullinger Foul Turnover (P3.T7)
+2,1063,Thomas REBOUND (Off:0 Def:2)
+2,1070,MISS Crowder 9' Jump Shot
+2,1084,Smart S.FOUL (P2.T3) (Z.Zarba)
+2,1084,CELTICS Timeout: Regular (Full 2 Short 1)
+2,1084,Smart T.FOUL (P2.T3) (Z.Zarba)
+2,1084,SUB: Turner FOR Smart
+2,1105,MISS Crowder 25' 3PT Jump Shot
+2,1107,Johnson REBOUND (Off:4 Def:0)
+2,1113,Thomas 1' Driving Layup (7 PTS) (Johnson 1 AST)
+2,1134,CELTICS Rebound
+2,1152,Johnson Free Throw 1 of 2 (7 PTS)
+2,1152,MISS Johnson Free Throw 2 of 2
+2,1169,Johnson REBOUND (Off:4 Def:1)
+2,1177,MISS Sullinger 27' 3PT Jump Shot
+2,1193,Crowder P.FOUL (P2.T4) (B.Taylor)
+2,1193,SUB: Lee FOR Sullinger
+2,1197,Thomas STEAL (1 STL)
+2,1198,MISS Crowder Free Throw 1 of 2
+2,1198,CELTICS Rebound
+2,1198,Crowder Free Throw 2 of 2 (8 PTS)
+2,1216,Johnson REBOUND (Off:4 Def:2)
+2,1222,Thomas Lost Ball Turnover (P2.T8)
+2,1238,CELTICS Rebound
+2,1238,MISS Lee Free Throw 1 of 2
+2,1238,CELTICS Rebound
+2,1238,Lee Free Throw 2 of 2 (1 PTS)
+2,1255,Turner L.B.FOUL (P1.PN) (B.Taylor)
+2,1264,Turner REBOUND (Off:0 Def:1)
+2,1268,Thomas Free Throw 1 of 2 (8 PTS)
+2,1268,Thomas Free Throw 2 of 2 (9 PTS)
+2,1287,CELTICS Rebound
+2,1302,Lee  Cutting Dunk Shot (3 PTS) (Thomas 4 AST)
+2,1323,Crowder REBOUND (Off:1 Def:4)
+2,1329,MISS Lee  Cutting Layup Shot
+2,1338,Thomas S.FOUL (P1.PN) (K.Fitzgerald)
+2,1354,Crowder 21' Jump Shot (10 PTS) (Lee 1 AST)
+2,1393,MISS Turner  3PT Jump Shot
+2,1404,Crowder S.FOUL (P3.PN) (B.Taylor)
+2,1404,SUB: Smart FOR Crowder
+2,1404,SUB: Olynyk FOR Johnson
+2,1410,Thomas 1' Running Reverse Layup (11 PTS)
+2,1438,Thomas 2' Driving Finger Roll Layup (13 PTS)
+3,1456,MISS Thomas 25' 3PT Jump Shot
+3,1485,MISS Sullinger 17' Jump Shot
+3,1486,Johnson L.B.FOUL (P3.T1) (Z.Zarba)
+3,1495,Crowder STEAL (1 STL)
+3,1507,Crowder 26' 3PT Jump Shot (13 PTS) (Thomas 5 AST)
+3,1543,Turner REBOUND (Off:0 Def:2)
+3,1553,Crowder Out of Bounds - Bad Pass Turnover Turnover (P1.T9)
+3,1564,Sullinger FLAGRANT.FOUL.TYPE1 (P3.T2) (Z.Zarba)
+3,1575,Crowder STEAL (2 STL)
+3,1588,Sullinger Out of Bounds - Bad Pass Turnover Turnover (P4.T10)
+3,1623,MISS Thomas  3PT Jump Shot
+3,1647,Johnson REBOUND (Off:4 Def:3)
+3,1664,Sullinger Lost Ball Turnover (P5.T11)
+3,1671,Turner P.FOUL (P2.T3) (B.Taylor)
+3,1683,Turner REBOUND (Off:0 Def:3)
+3,1695,MISS Thomas 10' Jump Shot
+3,1727,MISS Turner 12' Turnaround Fadeaway Shot
+3,1740,CELTICS Timeout: Regular (Full 3 Short 1)
+3,1740,SUB: Lee FOR Johnson
+3,1740,SUB: Olynyk FOR Sullinger
+3,1752,MISS Crowder 25' 3PT Jump Shot
+3,1769,Olynyk REBOUND (Off:0 Def:3)
+3,1775,Thomas  Running Finger Roll Layup (15 PTS)
+3,1801,Crowder S.FOUL (P4.T4) (K.Fitzgerald)
+3,1801,SUB: Smart FOR Crowder
+3,1820,MISS Turner 18' Jump Shot
+3,1821,Smart REBOUND (Off:2 Def:0)
+3,1822,Smart Free Throw 1 of 2 (1 PTS)
+3,1822,Smart Free Throw 2 of 2 (2 PTS)
+3,1835,Olynyk REBOUND (Off:0 Def:4)
+3,1846,MISS Lee 8' Turnaround Hook Shot
+3,1858,Lee S.FOUL (P1.PN) (Z.Zarba)
+3,1881,Smart Free Throw 1 of 3 (3 PTS)
+3,1881,MISS Smart Free Throw 2 of 3
+3,1881,CELTICS Rebound
+3,1881,MISS Smart Free Throw 3 of 3
+3,1910,Olynyk 25' 3PT Jump Shot (7 PTS) (Smart 1 AST)
+3,1941,MISS Lee 2' Layup
+3,1960,Turner REBOUND (Off:0 Def:4)
+3,1969,MISS Lee 7' Jump Shot
+3,1992,Lee REBOUND (Off:0 Def:1)
+3,1998,MISS Olynyk 25' 3PT Jump Shot
+3,2007,SUB: Jerebko FOR Olynyk
+3,2016,MISS Thomas 7' Floating Jump Shot
+3,2019,Thomas T.FOUL (P1.PN) (B.Taylor)
+3,2019,SUB: Young FOR Turner
+3,2048,Thomas 11' Jump Shot (17 PTS)
+3,2071,SUB: Johnson FOR Lee
+3,2079,MISS Smart  3PT Jump Shot
+3,2080,Jerebko REBOUND (Off:2 Def:2)
+3,2081,MISS Jerebko  Layup
+3,2097,Smart STEAL (1 STL)
+3,2104,MISS Thomas 27' 3PT Pullup Jump Shot
+3,2127,Young REBOUND (Off:0 Def:1)
+3,2134,Smart 2' Driving Finger Roll Layup (5 PTS)
+3,2134,Smart Free Throw 1 of 1 (6 PTS)
+3,2157,Johnson REBOUND (Off:4 Def:4)
+3,2160,MISS Thomas 34' 3PT Jump Shot
+3,2160,CELTICS Rebound
+4,2195,MISS Smart 26' 3PT Jump Shot
+4,2205,Johnson P.FOUL (P4.T1) (Z.Zarba)
+4,2214,Jerebko REBOUND (Off:2 Def:3)
+4,2226,Smart 2' Driving Layup (8 PTS) (Turner 1 AST)
+4,2248,Jerebko REBOUND (Off:2 Def:4)
+4,2261,Jerebko 26' 3PT Jump Shot (5 PTS) (Turner 2 AST)
+4,2279,Smart P.FOUL (P3.T2) (K.Fitzgerald)
+4,2301,Smart 3' Layup (10 PTS) (Jerebko 1 AST)
+4,2301,Smart Free Throw 1 of 1 (11 PTS)
+4,2337,Turner Free Throw 1 of 2 (5 PTS)
+4,2337,Turner Free Throw 2 of 2 (6 PTS)
+4,2350,Johnson REBOUND (Off:4 Def:5)
+4,2362,Turner 15' Step Back Jump Shot (8 PTS)
+4,2376,Johnson S.FOUL (P5.T3) (B.Taylor)
+4,2397,Turner 1' Driving Reverse Layup (10 PTS)
+4,2417,Johnson REBOUND (Off:4 Def:6)
+4,2421,Turner Out of Bounds - Bad Pass Turnover Turnover (P1.T12)
+4,2421,SUB: Crowder FOR Johnson
+4,2457,MISS Turner 24' 3PT Jump Shot
+4,2495,MISS Crowder 27' 3PT Jump Shot
+4,2509,Turner REBOUND (Off:0 Def:5)
+4,2510,CELTICS Timeout: Regular (Full 4 Short 1)
+4,2510,SUB: Thomas FOR Smart
+4,2510,SUB: Johnson FOR Young
+4,2526,MISS Jerebko 25' 3PT Jump Shot
+4,2560,Thomas 1' Driving Reverse Layup (19 PTS)
+4,2578,Jerebko REBOUND (Off:2 Def:5)
+4,2593,MISS Johnson 7' Hook Shot
+4,2611,Thomas P.FOUL (P2.T4) (Z.Zarba)
+4,2611,SUB: Smart FOR Jerebko
+4,2636,Turner REBOUND (Off:0 Def:6)
+4,2643,MISS Turner 2' Layup
+4,2645,Crowder REBOUND (Off:2 Def:4)
+4,2645,MISS Crowder 1' Tip Layup Shot
+4,2681,Thomas 26' 3PT Jump Shot (22 PTS) (Johnson 2 AST)
+4,2705,Crowder P.FOUL (P5.PN) (Z.Zarba)
+4,2705,SUB: Olynyk FOR Johnson
+4,2722,MISS Olynyk 25' 3PT Jump Shot
+4,2749,Crowder Out of Bounds - Bad Pass Turnover Turnover (P2.T13)
+4,2768,MISS Thomas 14' Jump Shot
+4,2793,Crowder REBOUND (Off:2 Def:5)
+4,2798,Olynyk Step Out of Bounds Turnover (P2.T14)
+4,2798,SUB: Johnson FOR Olynyk
+4,2822,Johnson REBOUND (Off:4 Def:7)
+4,2825,Thomas 2' Cutting Layup Shot (24 PTS) (Turner 3 AST)
+4,2838,Thomas STEAL (2 STL)
+4,2841,Crowder  Layup (15 PTS) (Thomas 6 AST)
+4,2841,Crowder Free Throw 1 of 1 (16 PTS)
+4,2854,CELTICS Timeout: Short (Full 4 Short 2)
+4,2857,MISS Crowder 24' 3PT Jump Shot
+4,2861,Smart STEAL (2 STL)
+4,2866,MISS Thomas 27' 3PT Jump Shot
+4,2867,Turner REBOUND (Off:1 Def:6)
+4,2869,Turner 2' Putback Layup (12 PTS)
+4,2869,SUB: Jerebko FOR Johnson
+4,2870,Smart STEAL (3 STL)
+4,2878,MISS Jerebko  3PT Jump Shot
+4,2879,Smart REBOUND (Off:3 Def:0)
+1,18,Young 1' Reverse Layup (2 PTS) (Johnson 1 AST)
+1,28,Lopez STEAL (1 STL)
+1,46,MISS Young 21' Jump Shot
+1,55,Young P.FOUL (P1.T1) (Z.Zarba)
+1,76,Lopez 8' Fadeaway Jumper (2 PTS) (Jack 1 AST)
+1,92,Lopez REBOUND (Off:0 Def:1)
+1,99,MISS Bogdanovic 4' Jump Shot
+1,117,Lopez REBOUND (Off:0 Def:2)
+1,122,Bogdanovic  Layup (2 PTS) (Jack 2 AST)
+1,138,Jack REBOUND (Off:0 Def:1)
+1,161,Lopez 7' Jump Bank Shot (4 PTS)
+1,185,Lopez 12' Jump Shot (6 PTS) (Jack 3 AST)
+1,185,Lopez Free Throw 1 of 1 (7 PTS)
+1,212,MISS Young 2' Layup
+1,215,Johnson S.FOUL (P1.T2) (K.Fitzgerald)
+1,218,Nets Timeout: Regular (Reg.1 Short 0)
+1,235,MISS Young 4' Jump Shot
+1,236,Young REBOUND (Off:1 Def:0)
+1,236,MISS Young  Layup
+1,267,MISS Lopez 17' Jump Shot
+1,291,Lopez 2' Layup (9 PTS) (Jack 4 AST)
+1,291,Lopez Free Throw 1 of 1 (10 PTS)
+1,309,Lopez BLOCK (1 BLK)
+1,332,MISS Bogdanovic  3PT Jump Shot
+1,360,Johnson 24' 3PT Jump Shot (3 PTS) (Bogdanovic 1 AST)
+1,386,Johnson 20' Jump Shot (5 PTS) (Jack 5 AST)
+1,419,Johnson 9' Driving Floating Jump Shot (7 PTS) (Jack 6 AST)
+1,427,Nets Rebound
+1,427,SUB: Reed FOR Lopez
+1,448,MISS Johnson 11' Turnaround Fadeaway Shot
+1,450,Reed REBOUND (Off:1 Def:0)
+1,457,MISS Bogdanovic 25' 3PT Jump Shot
+1,459,Reed REBOUND (Off:2 Def:0)
+1,459,Reed 1' Putback Layup (2 PTS)
+1,494,Johnson Bad Pass Turnover (P1.T1)
+1,522,MISS Young 9' Hook Shot
+1,532,Nets Timeout: Short (Reg.1 Short 1)
+1,532,SUB: Lopez FOR Bogdanovic
+1,532,SUB: Ellington FOR Young
+1,543,Johnson 18' Jump Shot (9 PTS) (Ellington 1 AST)
+1,562,Ellington REBOUND (Off:0 Def:1)
+1,571,Lopez Traveling Turnover (P1.T2)
+1,592,Reed REBOUND (Off:2 Def:1)
+1,603,MISS Lopez 8' Hook Shot
+1,611,Ellington STEAL (1 STL)
+1,617,Reed 1' Cutting Layup Shot (4 PTS) (Jack 7 AST)
+1,630,Jack P.FOUL (P1.T3) (B.Taylor)
+1,630,SUB: Bogdanovic FOR Johnson
+1,641,Bogdanovic S.FOUL (P1.PN) (K.Fitzgerald)
+1,657,MISS Jack 21' Jump Shot
+1,667,Bogdanovic REBOUND (Off:0 Def:1)
+1,676,Bogdanovic 1' Driving Layup (4 PTS)
+1,682,Jack Free Throw 1 of 2 (1 PTS)
+1,682,Jack Free Throw 2 of 2 (2 PTS)
+1,696,Reed REBOUND (Off:2 Def:2)
+1,715,MISS Jack 21' Jump Shot
+2,733,Reed S.FOUL (P1.T1) (K.Fitzgerald)
+2,733,SUB: Young FOR Reed
+2,752,Young 10' Hook Shot (4 PTS) (Larkin 1 AST)
+2,776,Lopez Out of Bounds - Bad Pass Turnover Turnover (P2.T3)
+2,805,Ellington REBOUND (Off:0 Def:2)
+2,817,Lopez Free Throw 1 of 2 (11 PTS)
+2,817,SUB: Johnson FOR Bogdanovic
+2,817,Lopez Free Throw 2 of 2 (12 PTS)
+2,825,Lopez S.FOUL (P1.T2) (K.Fitzgerald)
+2,845,Lopez 12' Step Back Jump Shot (14 PTS)
+2,863,Ellington S.FOUL (P1.T3) (Z.Zarba)
+2,879,Young 6' Driving Floating Bank Jump Shot (6 PTS) (Ellington 2 AST)
+2,903,MISS Young 7' Jump Shot
+2,911,Lopez REBOUND (Off:0 Def:3)
+2,921,MISS Young 3' Jump Shot
+2,930,Nets Violation: Delay of game Violation
+2,953,MISS Young 8' Floating Jump Shot
+2,954,Lopez REBOUND (Off:1 Def:3)
+2,954,Lopez 1' Putback Layup (16 PTS)
+2,968,Larkin STEAL (1 STL)
+2,973,Young  Running Layup (8 PTS) (Johnson 2 AST)
+2,1015,Young 20' Jump Shot (10 PTS)
+2,1062,MISS Lopez 13' Turnaround Fadeaway Shot
+2,1070,Ellington REBOUND (Off:0 Def:3)
+2,1084,SUB: Jack FOR Larkin
+2,1084,Ellington Free Throw Technical (1 PTS)
+2,1084,Ellington Free Throw 1 of 2 (2 PTS)
+2,1084,Ellington Free Throw 2 of 2 (3 PTS)
+2,1090,Jack Violation:Kicked Ball (.)
+2,1133,MISS Johnson 25' 3PT Jump Shot
+2,1152,Young S.FOUL (P2.T4) (B.Taylor)
+2,1152,SUB: Reed FOR Young
+2,1152,Lopez REBOUND (Off:1 Def:4)
+2,1168,MISS Johnson 18' Turnaround Fadeaway Shot
+2,1178,Lopez REBOUND (Off:1 Def:5)
+2,1197,Jack Bad Pass Turnover (P1.T4)
+2,1198,Jack P.FOUL (P2.PN) (Z.Zarba)
+2,1198,SUB: Larkin FOR Jack
+2,1215,MISS Lopez 10' Floating Jump Shot
+2,1222,Larkin STEAL (2 STL)
+2,1236,MISS Reed 8' Jump Shot
+2,1237,Reed REBOUND (Off:3 Def:2)
+2,1237,MISS Reed 2' Tip Layup Shot
+2,1238,Lopez L.B.FOUL (P2.PN) (B.Taylor)
+2,1238,SUB: Bargnani FOR Lopez
+2,1254,MISS Ellington  3PT Jump Shot
+2,1255,Nets Rebound
+2,1255,Nets Timeout: Regular (Reg.2 Short 1)
+2,1263,MISS Bargnani 21' Jump Shot
+2,1268,Ellington S.FOUL (P2.PN) (Z.Zarba)
+2,1268,SUB: Bogdanovic FOR Ellington
+2,1285,MISS Bogdanovic 18' Step Back Jump Shot
+2,1322,MISS Johnson  3PT Jump Shot
+2,1330,Reed REBOUND (Off:3 Def:3)
+2,1338,Larkin Free Throw 1 of 2 (1 PTS)
+2,1338,SUB: Sloan FOR Johnson
+2,1338,Larkin Free Throw 2 of 2 (2 PTS)
+2,1371,Bargnani 19' Jump Shot (2 PTS) (Sloan 1 AST)
+2,1394,Bogdanovic REBOUND (Off:0 Def:2)
+2,1404,Bogdanovic Free Throw 1 of 2 (5 PTS)
+2,1404,Bogdanovic Free Throw 2 of 2 (6 PTS)
+2,1429,Sloan 1' Driving Layup (2 PTS) (Bargnani 1 AST)
+2,1440,MISS Sloan 55' 3PT Jump Shot
+2,1440,Nets Rebound
+3,1457,Young REBOUND (Off:1 Def:1)
+3,1471,MISS Lopez 12' Jump Shot
+3,1471,Young REBOUND (Off:2 Def:1)
+3,1474,Young 7' Hook Shot (12 PTS)
+3,1486,Nets Rebound
+3,1495,Johnson Lost Ball Turnover (P2.T5)
+3,1535,MISS Lopez 3' Driving Finger Roll Layup
+3,1536,Young REBOUND (Off:3 Def:1)
+3,1542,MISS Johnson  3PT Jump Shot
+3,1560,MISS Jack  Layup
+3,1561,Lopez REBOUND (Off:2 Def:5)
+3,1561,MISS Lopez  Tip Layup Shot
+3,1562,Lopez REBOUND (Off:3 Def:5)
+3,1562,MISS Lopez 1' Tip Layup Shot
+3,1563,Lopez REBOUND (Off:4 Def:5)
+3,1564,Lopez Free Throw Flagrant 1 of 2 (17 PTS)
+3,1564,Lopez Free Throw Flagrant 2 of 2 (18 PTS)
+3,1575,Johnson Bad Pass Turnover (P3.T6)
+3,1603,Johnson 26' 3PT Jump Shot (12 PTS) (Lopez 1 AST)
+3,1624,Lopez REBOUND (Off:4 Def:6)
+3,1646,MISS Jack 8' Jump Shot
+3,1664,Young STEAL (1 STL)
+3,1682,MISS Jack 25' 3PT Jump Shot
+3,1696,Young REBOUND (Off:3 Def:2)
+3,1703,Young 7' Turnaround Hook Shot (14 PTS) (Jack 8 AST)
+3,1728,Johnson REBOUND (Off:0 Def:1)
+3,1740,Johnson 22' Jump Shot (14 PTS)
+3,1753,Bogdanovic REBOUND (Off:0 Def:3)
+3,1768,MISS Johnson 11' Jump Shot
+3,1796,MISS Lopez 9' Hook Shot
+3,1798,Young REBOUND (Off:4 Def:2)
+3,1801,Bogdanovic Free Throw 1 of 2 (7 PTS)
+3,1801,Bogdanovic Free Throw 2 of 2 (8 PTS)
+3,1822,Young S.FOUL (P3.T1) (Z.Zarba)
+3,1834,MISS Johnson 24' 3PT Jump Shot
+3,1847,Young REBOUND (Off:4 Def:3)
+3,1858,Lopez 9' Fadeaway Jumper (20 PTS)
+3,1858,Lopez Free Throw 1 of 1 (21 PTS)
+3,1881,Young S.FOUL (P4.T2) (K.Fitzgerald)
+3,1881,SUB: Reed FOR Young
+3,1881,SUB: Ellington FOR Johnson
+3,1881,Lopez REBOUND (Off:4 Def:7)
+3,1893,Reed 13' Jump Shot (6 PTS) (Jack 9 AST)
+3,1928,Bogdanovic  3PT Jump Shot (11 PTS) (Lopez 2 AST)
+3,1941,Jack BLOCK (1 BLK)
+3,1942,Ellington REBOUND (Off:0 Def:4)
+3,1960,MISS Lopez 7' Hook Shot
+3,1970,Ellington REBOUND (Off:0 Def:5)
+3,1974,Nets Timeout: Regular (Reg.3 Short 1)
+3,1974,SUB: Larkin FOR Jack
+3,1991,MISS Reed 16' Jump Shot
+3,2000,Larkin REBOUND (Off:0 Def:1)
+3,2007,Lopez OFF.Foul (P3) (B.Taylor)
+3,2007,Lopez Foul Turnover (P3.T7)
+3,2017,Reed REBOUND (Off:3 Def:4)
+3,2019,MISS Ellington Free Throw Technical
+3,2019,Nets Rebound
+3,2019,SUB: Bargnani FOR Lopez
+3,2019,SUB: Sloan FOR Reed
+3,2033,MISS Ellington  3PT Jump Shot
+3,2035,Bargnani REBOUND (Off:1 Def:0)
+3,2035,Bargnani 1' Tip Layup Shot (4 PTS)
+3,2066,Bogdanovic 2' Driving Layup (13 PTS)
+3,2082,Bogdanovic REBOUND (Off:0 Def:4)
+3,2097,Bogdanovic Bad Pass Turnover (P1.T8)
+3,2105,Bogdanovic REBOUND (Off:0 Def:5)
+3,2126,MISS Bogdanovic 12' Driving Hook Shot
+3,2134,Bogdanovic S.FOUL (P2.T3) (B.Taylor)
+3,2156,MISS Bogdanovic 26' 3PT Step Back Jump Shot
+4,2177,Larkin Out of Bounds - Bad Pass Turnover Turnover (P1.T9)
+4,2196,Bargnani REBOUND (Off:1 Def:1)
+4,2213,MISS Larkin 12' Jump Shot
+4,2220,Sloan P.FOUL (P1.T1) (B.Taylor)
+4,2247,MISS Ellington 25' 3PT Jump Shot
+4,2253,Larkin P.FOUL (P1.T2) (K.Fitzgerald)
+4,2261,Nets Timeout: Regular (Reg.4 Short 1)
+4,2291,Johnson 15' Step Back Jump Shot (16 PTS) (Larkin 2 AST)
+4,2301,Larkin S.FOUL (P2.T3) (K.Fitzgerald)
+4,2301,SUB: Lopez FOR Bargnani
+4,2301,SUB: Young FOR Larkin
+4,2319,Lopez Out of Bounds Lost Ball Turnover (P4.T10)
+4,2337,Lopez S.FOUL (P4.T4) (B.Taylor)
+4,2349,MISS Young 7' Driving Hook Shot
+4,2362,Nets Timeout: Short (Reg.4 Short 2)
+4,2362,SUB: Larkin FOR Sloan
+4,2376,Lopez 8' Turnaround Jump Shot (23 PTS)
+4,2376,Lopez Free Throw 1 of 1 (24 PTS)
+4,2416,MISS Johnson 8' Floating Jump Shot
+4,2446,Ellington 20' Jump Shot (5 PTS) (Larkin 3 AST)
+4,2458,Ellington REBOUND (Off:0 Def:6)
+4,2482,MISS Johnson 3' Layup
+4,2483,Lopez REBOUND (Off:5 Def:7)
+4,2486,Lopez 2' Putback Layup (26 PTS)
+4,2496,Larkin REBOUND (Off:0 Def:2)
+4,2508,MISS Larkin 26' 3PT Jump Shot
+4,2510,SUB: Bogdanovic FOR Ellington
+4,2527,Lopez REBOUND (Off:5 Def:8)
+4,2546,Lopez 10' Floating Jump Shot (28 PTS) (Larkin 4 AST)
+4,2577,MISS Lopez 9' Hook Shot
+4,2594,Bogdanovic REBOUND (Off:0 Def:6)
+4,2617,MISS Bogdanovic 8' Jump Shot
+4,2618,Young REBOUND (Off:5 Def:3)
+4,2621,MISS Johnson 24' 3PT Jump Shot
+4,2624,Nets Rebound
+4,2635,MISS Lopez 12' Turnaround Fadeaway Shot
+4,2646,Larkin REBOUND (Off:0 Def:3)
+4,2666,Johnson 16' Step Back Jump Shot (18 PTS)
+4,2705,Young Free Throw 1 of 2 (15 PTS)
+4,2705,Young Free Throw 2 of 2 (16 PTS)
+4,2723,Young REBOUND (Off:5 Def:4)
+4,2738,Johnson 18' Pullup Jump Shot (20 PTS)
+4,2758,Larkin Offensive Charge Foul (P3.PN) (K.Fitzgerald)
+4,2758,Larkin Foul Turnover (P2.T11)
+4,2768,Young REBOUND (Off:5 Def:5)
+4,2790,MISS Larkin 24' 3PT Jump Shot
+4,2820,MISS Lopez 9' Jump Shot
+4,2838,Larkin Bad Pass Turnover (P3.T12)
+4,2841,Johnson S.FOUL (P2.PN) (K.Fitzgerald)
+4,2841,SUB: Sloan FOR Bogdanovic
+4,2844,Nets Timeout: Regular (Reg.5 Short 2)
+4,2854,Lopez  Dunk (30 PTS) (Young 1 AST)
+4,2857,Larkin REBOUND (Off:0 Def:4)
+4,2861,Larkin Bad Pass Turnover (P4.T13)
+4,2869,Nets Timeout: Short (Reg.5 Short 3)
+4,2869,SUB: Ellington FOR Sloan
+4,2870,Young Bad Pass Turnover (P1.T14)
