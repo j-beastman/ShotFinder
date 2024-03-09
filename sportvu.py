@@ -96,13 +96,14 @@ TRUE_SHOT_TOTAL = 231 # according to sportsreference
 ###################################################################################
 #  Part II: Calculate arc length of shot vs. distance to basketball        
 ###################################################################################
-def ball_in_air(moment, ball_location):
-    # Grab location of ball
+def ball_in_air(moment, ball_location, threshold=2):
+    # Loc_info is info of ball + players
     loc_info = moment[5]
+    # Loop through all players, if any are within 'threshold' feet of ball, 
     for i in range(1, 10):
         player_info = loc_info[i]
         player_location = Location(player_info[2], player_info[3], player_info[4])
-        if euclid_distance(player_location, ball_location) < 2:
+        if euclid_distance(player_location, ball_location) < threshold:
             return False
     return True
 shot_arc_information = []
@@ -121,12 +122,18 @@ for event in all_data["events"]:
                     ball_arc_information = []
                     # Go back in time until ball is in the hands of a player
                     try: 
+                        # Loop while ball is in the air otherwise, we assume ball 
+                        #  is in the hands of the shooter, so we stop taking in measurements
                         while in_air:
+                            # The ball location is really what we care about here.
                             ball_arc_information.append(ball_location)
+                            # Go back in time by 1 moment, if ball is still in air, then
+                            #   we are at beginning of loop and we take another measurement
+                            #   of its location.
                             past_moment = event["moments"][i]
                             ball_info = past_moment[5][0]
                             ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-                            in_air = ball_in_air(past_moment, ball_location)
+                            in_air:bool = ball_in_air(past_moment, ball_location)
                             i -= 1
                         shot_arc_information.append(ball_arc_information)
                     except IndexError:
