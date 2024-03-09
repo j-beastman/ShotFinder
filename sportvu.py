@@ -4,18 +4,26 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import math
-from collections import namedtuple
 import pandas as pd
 
 # Define a named tuple for the bucket location
-Location = namedtuple('Location', ['X', 'Y', 'Z'])
+# Location = namedtuple('Location', ['X', 'Y', 'Z'])
+class Location:
+    def __init__(self, X, Y, Z):
+        self.X = X
+        self.Y = Y
+        self.Z = Z
+
+    def distance_to(self, other):
+        return math.sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2 + (self.Z - other.Z) ** 2)
+
 
 # Define the locations
 # All measurements in feet
 BUCKET_HOME = Location(5.25, 25, 10)
 BUCKET_AWAY = Location(88.75, 25, 10)
 HALF_COURT = 45
-THRESHOLD = 4
+# THRESHOLD = 4
 
 # Read in the SportVU tracking data
 sportvu = []
@@ -23,13 +31,16 @@ sportvu = []
 # fun "is_shot" -- get euclidean distance of ball to hoop 
 def is_shot(Ball):
     euclid_distance = 20
-    if Ball.X < HALF_COURT:
+    if Ball.X <= HALF_COURT:
         euclid_distance = math.sqrt((Ball.X - BUCKET_HOME.X)**2 
                                     + (Ball.Y - BUCKET_HOME.Y)**2 + (Ball.Z - BUCKET_HOME.Z)**2)
     else:
         euclid_distance = math.sqrt((Ball.X - BUCKET_AWAY.X)**2 
                                     + (Ball.Y - BUCKET_AWAY.Y)**2 + (Ball.Z - BUCKET_AWAY.Z)**2)
-    return euclid_distance <= 4
+    return euclid_distance <= 3
+
+def euclid_distance(object1 : Location, object2 : Location):
+    return math.sqrt((object1.X - object2.X)**2 + (object1.Y - object2.Y)**2)
 
 # 
 def seconds_since_start(quarter, seconds_left):
@@ -41,9 +52,7 @@ with open('0021500495.json', 'r') as file:
 
 # These are the two arrays that you need to populate with actual data
 shot_times_the_list = []
-shot_facts_the_list = []
 
-i = 0
 for event in all_data["events"]:
     for moment in event["moments"]:
         ball_info = moment[5][0]
@@ -51,19 +60,151 @@ for event in all_data["events"]:
         if is_shot(ball_location):
             seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
             shot_times_the_list.append(seconds)
-            shot_facts_the_list.append(i)
-            i += 1
-
 
 shot_times = np.array(shot_times_the_list) # Between 0 and 2880
-shot_facts = np.array(shot_facts_the_list) # Scaled between 0 and 10
+
+# So, right now the array has all of the moments which are shots,
+#   but the issue is that the moments are very close to each other in time
+#   so, we have about 5x as many shots as there actually were in the game.
+#   We're going to group the numbers that are close together (within 1 second)
+#       and 
+array_sorted = np.sort(shot_times)
+threshold = 1
+# Group numbers and calculate averages
+averages = []
+i = 0
+while i < len(array_sorted):
+    # Start a new group with the current number
+    current_group = [array_sorted[i]]
+    # Look ahead to the next numbers and add them to the group if they're within the threshold
+    while i + 1 < len(array_sorted) and array_sorted[i + 1] - array_sorted[i] <= threshold:
+        i += 1
+        current_group.append(array_sorted[i])
+    # Calculate the average of the current group
+    avg = int(np.mean(current_group))
+    averages.append(avg)
+    i += 1
+
+# The resulting array of averages
+shot_times = np.array(averages)
+shot_facts = np.arange(0, len(shot_times), 1)
+
+print("Found", len(shot_times), "shots")
+
+TRUE_SHOT_TOTAL = 231 # according to sportsreference
+
+###################################################################################
+#  Part II: Calculate arc length of shot vs. distance to basketball        
+###################################################################################
+def ball_in_air(moment, ball_location):
+    # Grab location of ball
+    loc_info = moment[5]
+    for i in range(1, 10):
+        player_info = loc_info[i]
+        player_location = Location(player_info[2], player_info[3], player_info[4])
+        if euclid_distance(player_location, ball_location) < 2:
+            return False
+    return True
+shot_arc_information = []
+shots_found = 0
+# shots_not_found = shot_times.copy()
+for event in all_data["events"]:
+    for i, moment in enumerate(event["moments"]):
+        ball_info = moment[5][0]
+        ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+        if is_shot(ball_location):
+            try: 
+                if abs(seconds_since_start(quarter=moment[0], seconds_left=moment[2]) - shot_times[shots_found]) < 1:
+                    # print("Found a new shot", shots_found, "shots found")
+                    shots_found += 1
+                    in_air = True
+                    ball_arc_information = []
+                    # Go back in time until ball is in the hands of a player
+                    try: 
+                        while in_air:
+                            ball_arc_information.append(ball_location)
+                            past_moment = event["moments"][i]
+                            ball_info = past_moment[5][0]
+                            ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+                            in_air = ball_in_air(past_moment, ball_location)
+                            i -= 1
+                        shot_arc_information.append(ball_arc_information)
+                    except IndexError:
+                        shot_arc_information.append(ball_arc_information)
+                        continue
+            except IndexError:
+                print("Found all shots")
+                break
+
+# Calculate the arc length of the shot
+shot_path = shot_arc_information[1]
+arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+
+# Calculate the straight-line distance from the start to the end of the shot
+straight_line_distance = shot_path[0].distance_to(shot_path[-1])
+
+print(f"Arc Length: {arc_length:.2f}")
+print(f"Straight-line Distance: {straight_line_distance:.2f}")
+
+def calculate_arc_length(shot_path):
+    """
+    Calculate the arc length for a given shot path.
+    
+    Args:
+    - shot_path: An iterable of Location objects.
+
+    Returns:
+    - The total arc length of the path.
+    """
+    return sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+
+# Now, apply this function to each shot path in your array
+arc_lengths = np.array([calculate_arc_length(shot) for shot in shot_arc_information])
+print(len(arc_lengths))
+print(len(shot_times))
 
 # Now that we have our shot times, let's figure out our accuracy and sensitivity
 #   Confusion matrix (according to event dataset)
 # freethrowy poo
 
+
+# This code creates the timeline display from the shot_times
+# and shot_facts arrays.
+# DO NOT MODIFY THIS CODE APART FROM THE SHOT FACT LABEL
+fig, ax = plt.subplots(figsize=(12,3))
+fig.canvas.manager.set_window_title('Shot Timeline')
+
+plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
+plt.bar(shot_times, arc_lengths, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
+
+ax.spines['bottom'].set_position('zero')
+ax.spines['top'].set_color('none')
+ax.spines['right'].set_color('none')
+ax.spines['left'].set_color('none')
+ax.tick_params(axis='x', length=20)
+ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator([0,720,1440,2160,2880])) 
+ax.set_yticks([])
+
+_, xmax = ax.get_xlim()
+ymin, ymax = ax.get_ylim()
+ax.set_xlim(-15, xmax)
+ax.set_ylim(ymin, ymax+5)
+ax.text(xmax, 2, "time", ha='right', va='top', size=10)
+plt.legend(ncol=5, loc='upper left')
+
+plt.tight_layout()
+plt.show()
+
+plt.savefig("Shot_Timeline.png")
+
+###################################################################################
+# Below is omitted code which we used to figure out our false positives/negatives
+#   we figured out that sportsreference data is not super reliable, so we decided
+#   we couldn't trust the results we gathered from the code below.           
+###################################################################################
+
 #############################################################################
-# Part II: Validation
+# Validation:
 # We have our predictions for shots, now we want to find
 # How accurate our predictions really are. Using the dataset with
 # "true" recordings of actions (although we aren't sure about the validity)
@@ -74,26 +215,26 @@ shot_facts = np.array(shot_facts_the_list) # Scaled between 0 and 10
 ###########################################################
 ## Combine the description columns into 1 column: ACTIONS #
 ###########################################################
+def omitted1():
+    event_data = pd.read_csv("0021500495.csv")
+    # do .copy() to please pandas
+    event_data_home = event_data[event_data["HOMEDESCRIPTION"].notna()].copy()
+    event_data_away = event_data[event_data["VISITORDESCRIPTION"].notna()].copy()
 
-event_data = pd.read_csv("0021500495.csv")
-# do .copy() to please pandas
-event_data_home = event_data[event_data["HOMEDESCRIPTION"].notna()].copy()
-event_data_away = event_data[event_data["VISITORDESCRIPTION"].notna()].copy()
+    event_data_home.drop(columns=["VISITORDESCRIPTION"])
+    event_data_away.drop(columns=["HOMEDESCRIPTION"])
 
-event_data_home.drop(columns=["VISITORDESCRIPTION"])
-event_data_away.drop(columns=["HOMEDESCRIPTION"])
+    event_data_home["ACTIONS"] = event_data_home["HOMEDESCRIPTION"]
+    event_data_away["ACTIONS"] = event_data_away["VISITORDESCRIPTION"]
 
-event_data_home["ACTIONS"] = event_data_home["HOMEDESCRIPTION"]
-event_data_away["ACTIONS"] = event_data_away["VISITORDESCRIPTION"]
+    event_data_home = event_data_home.drop(columns=["HOMEDESCRIPTION"])
+    event_data_away = event_data_away.drop(columns=["VISITORDESCRIPTION"])
 
-event_data_home = event_data_home.drop(columns=["HOMEDESCRIPTION"])
-event_data_away = event_data_away.drop(columns=["VISITORDESCRIPTION"])
+    event_data = pd.concat([event_data_home, event_data_away], axis=0)
 
-event_data = pd.concat([event_data_home, event_data_away], axis=0)
+    event_data.reset_index(inplace=True, drop=True)
 
-event_data.reset_index(inplace=True, drop=True)
-
-event_data = event_data[['PERIOD', 'PCTIMESTRING', 'ACTIONS']]
+    event_data = event_data[['PERIOD', 'PCTIMESTRING', 'ACTIONS']]
 
 ###################################################################################
 ## Convert the PCTIMESTRING column into ELAPSED_SECS (seconds since start) column #
@@ -102,66 +243,65 @@ event_data = event_data[['PERIOD', 'PCTIMESTRING', 'ACTIONS']]
 #   splitting into a minutes and seconds column (which both represent time until end
 #   of the quarter, which is what you see on TV). Then we use our seconds_since_start
 #   function to calculate the time elapsed since beginning of the game.
-min_sec_split = event_data["PCTIMESTRING"].str.split(":", expand=True).astype(int)
-minutes_till = min_sec_split[0]
-seconds_till = min_sec_split[1]
-total_seconds = minutes_till * 60 + seconds_till
-seconds = total_seconds.combine(event_data["PERIOD"], 
-                                      func=lambda seconds_left, 
-                                                quarter: seconds_since_start(quarter, seconds_left))
-# Take new calculations, put into elapsed time column, drop the PCTIMESTRING column
-event_data['ELAPSED_SECS'] = seconds
-event_data = event_data[['PERIOD', 'ELAPSED_SECS', 'ACTIONS']]
-event_data.to_csv("event_data.csv", index=False)
+def omitted3(event_data):
+    min_sec_split = event_data["PCTIMESTRING"].str.split(":", expand=True).astype(int)
+    minutes_till = min_sec_split[0]
+    seconds_till = min_sec_split[1]
+    total_seconds = minutes_till * 60 + seconds_till
+    seconds = total_seconds.combine(event_data["PERIOD"], 
+                                        func=lambda seconds_left, 
+                                                    quarter: seconds_since_start(quarter, seconds_left))
+    # Take new calculations, put into elapsed time column, drop the PCTIMESTRING column
+    event_data['ELAPSED_SECS'] = seconds
+    event_data = event_data[['PERIOD', 'ELAPSED_SECS', 'ACTIONS']]
+    event_data.to_csv("event_data.csv", index=False)
 
 ###################################################################################
 ## Filter the dataframe for actions that are shots (either misses or makes) 
 # --> Keeping any row which has "Shot", "Miss", or "Free throw" in it                  
 ###################################################################################
-shots_df = event_data[event_data['ACTIONS'].str.contains('Shot|MISS|Free Throw|Jumper|PTS')]
-shots_df.to_csv("shot_data.csv", index=False)
+def omitted2(event_data):
+    shots_df = event_data[event_data['ACTIONS'].str.contains('Shot|MISS|Free Throw|Jumper|PTS')]
+    shots_df.to_csv("shot_data.csv", index=False)
+    print(shots_df.shape, "Total shots according to this df")
 
-def find_unique_elements(list_a, list_b):
-    set_a = set(list_a)
-    set_b = set(list_b)
-    
-    # Elements of list a that are not in list b
-    unique_in_a = set_a - set_b
-    
-    # Elements of list b that are not in list a
-    unique_in_b = set_b - set_a
-    
-    return unique_in_a, unique_in_b
+    def find_approx_matches(list_a, list_b, tolerance=3):
+        # Convert both lists to numpy arrays for efficient computation
+        import numpy as np
+        array_a = np.array(list_a)
+        array_b = np.array(list_b)
 
-false_positives, shots_not_captures = find_unique_elements(shot_times, np.array(shots_df["ELAPSED_SECS"]))
-print(false_positives, shots_not_captures)
+        # Initialize sets to keep track of indices with matches
+        matches_in_a = set()
+        matches_in_b = set()
 
+        # Check each element in array_a for close matches in array_b
+        for i, value_a in enumerate(array_a):
+            # Compute the absolute difference with all elements in array_b
+            diffs = np.abs(array_b - value_a)
+            # Find indices in array_b where the difference is within the tolerance
+            close_indices = np.where(diffs <= tolerance)[0]
+            if len(close_indices) > 0:
+                # If there are close matches, record the indices
+                matches_in_a.add(i)
+                matches_in_b.update(close_indices)
 
-# # This code creates the timeline display from the shot_times
-# # and shot_facts arrays.
-# # DO NOT MODIFY THIS CODE APART FROM THE SHOT FACT LABEL
-# fig, ax = plt.subplots(figsize=(12,3))
-# fig.canvas.manager.set_window_title('Shot Timeline')
+        # Determine elements that were not matched
+        unmatched_in_a = set(range(len(array_a))) - matches_in_a
+        unmatched_in_b = set(range(len(array_b))) - matches_in_b
 
-# plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
-# plt.bar(shot_times, shot_facts, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
+        # Convert indices back to original elements (optional, depending on needs)
+        unmatched_elements_a = array_a[list(unmatched_in_a)]
+        unmatched_elements_b = array_b[list(unmatched_in_b)]
 
-# ax.spines['bottom'].set_position('zero')
-# ax.spines['top'].set_color('none')
-# ax.spines['right'].set_color('none')
-# ax.spines['left'].set_color('none')
-# ax.tick_params(axis='x', length=20)
-# ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator([0,720,1440,2160,2880])) 
-# ax.set_yticks([])
+        return unmatched_elements_a, unmatched_elements_b
 
-# _, xmax = ax.get_xlim()
-# ymin, ymax = ax.get_ylim()
-# ax.set_xlim(-15, xmax)
-# ax.set_ylim(ymin, ymax+5)
-# ax.text(xmax, 2, "time", ha='right', va='top', size=10)
-# plt.legend(ncol=5, loc='upper left')
+    # Assuming shot_times and shots_df["ELAPSED_SECS"] are defined
+    # Convert shots_df["ELAPSED_SECS"] to a list if it's not already
+    shots_df_elapsed_secs_list = shots_df["ELAPSED_SECS"].tolist()
 
-# plt.tight_layout()
-# plt.show()
+    # Find unmatched elements with the updated criteria
+    false_positives, shots_not_captured = find_approx_matches(shot_times, shots_df_elapsed_secs_list, tolerance=3)
 
-#plt.savefig("Shot_Timeline.png")
+    print("Found", len(false_positives), "shots from data that are not close to any in sportsreference")
+    print("Failed to find", len(shots_not_captured), "shots according to sportsreference that are close to any in data")
