@@ -23,26 +23,23 @@ class Location:
 BUCKET_HOME = Location(5.25, 25, 10)
 BUCKET_AWAY = Location(88.75, 25, 10)
 HALF_COURT = 45
-# THRESHOLD = 4
+DISTANCE_THRESHOLD_FOR_SHOT = 4
 
-# Read in the SportVU tracking data
-sportvu = []
+def euclid_distance(object1 : Location, object2 : Location):
+    return math.sqrt((object1.X - object2.X) ** 2 + (object1.Y - object2.Y) ** 2)
 
 # fun "is_shot" -- get euclidean distance of ball to hoop 
 def is_shot(Ball):
-    euclid_distance = 20
+    euclid_distance:float = 20.0
     if Ball.X <= HALF_COURT:
-        euclid_distance = math.sqrt((Ball.X - BUCKET_HOME.X)**2 
-                                    + (Ball.Y - BUCKET_HOME.Y)**2 + (Ball.Z - BUCKET_HOME.Z)**2)
+        euclid_distance = math.sqrt(((Ball.X - BUCKET_HOME.X) ** 2)
+                                    + ((Ball.Y - BUCKET_HOME.Y) ** 2) + ((Ball.Z - BUCKET_HOME.Z) ** 2))
     else:
-        euclid_distance = math.sqrt((Ball.X - BUCKET_AWAY.X)**2 
-                                    + (Ball.Y - BUCKET_AWAY.Y)**2 + (Ball.Z - BUCKET_AWAY.Z)**2)
-    return euclid_distance <= 3
+        euclid_distance = math.sqrt(((Ball.X - BUCKET_AWAY.X) ** 2)
+                                    + ((Ball.Y - BUCKET_AWAY.Y) **2 ) + ((Ball.Z - BUCKET_AWAY.Z) ** 2))
+    return euclid_distance <= DISTANCE_THRESHOLD_FOR_SHOT
 
-def euclid_distance(object1 : Location, object2 : Location):
-    return math.sqrt((object1.X - object2.X)**2 + (object1.Y - object2.Y)**2)
-
-# 
+# Used to determine time since start
 def seconds_since_start(quarter, seconds_left):
     return ((quarter - 1) * 720) + (720 - seconds_left)
 
@@ -53,122 +50,139 @@ with open('0021500495.json', 'r') as file:
 # These are the two arrays that you need to populate with actual data
 shot_times_the_list = []
 
-for event in all_data["events"]:
+# Loops through the SportsVu data, if the ball height is above rim, 
+#   we can safely classify if it is a shot or not.
+for i, event in enumerate(all_data["events"]):
     for moment in event["moments"]:
         ball_info = moment[5][0]
         ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-        if is_shot(ball_location):
-            seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
-            shot_times_the_list.append(seconds)
+        if ball_location.Z > 10:
+            if is_shot(ball_location):
+                seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
+                shot_times_the_list.append((seconds, moment[1]))
+                
+                
 
-shot_times = np.array(shot_times_the_list) # Between 0 and 2880
+# sheeet we getting fucked up on free throws
+
+shot_times = np.array(shot_times_the_list)
+print(shot_times[:20])
+print(shot_times.shape)
 
 # So, right now the array has all of the moments which are shots,
 #   but the issue is that the moments are very close to each other in time
 #   so, we have about 5x as many shots as there actually were in the game.
 #   We're going to group the numbers that are close together (within 1 second)
 #       and 
-array_sorted = np.sort(shot_times)
-threshold = 1
+grouping_threshold = 1.5 * 1000 # convert milliseconds to seconds
+
 # Group numbers and calculate averages
 averages = []
 i = 0
-while i < len(array_sorted):
-    # Start a new group with the current number
-    current_group = [array_sorted[i]]
+while i < len(shot_times) - 1:
+    # Start a new group with the current timestamp.
+    current_group = [shot_times[i][0]]
     # Look ahead to the next numbers and add them to the group if they're within the threshold
-    while i + 1 < len(array_sorted) and array_sorted[i + 1] - array_sorted[i] <= threshold:
+    #   We compare based on timestamp, not on seconds since start
+    while ((i + 1) < len(shot_times)) and abs(shot_times[i + 1][1] 
+                                                - shot_times[i][1]) <= grouping_threshold:
         i += 1
-        current_group.append(array_sorted[i])
+        # Append the seconds since game start
+        current_group.append(shot_times[i][0])
     # Calculate the average of the current group
     avg = int(np.mean(current_group))
     averages.append(avg)
     i += 1
 
+# Each shot is accounted for but it doesn't reflect any exact moment of either
+#   when the shot was taken or when the shot missed or went in.
+
+
 # The resulting array of averages
 shot_times = np.array(averages)
-shot_facts = np.arange(0, len(shot_times), 1)
 
+shot_facts = np.arange(0, len(shot_times), 1)
+arc_lengths = shot_facts
 print("Found", len(shot_times), "shots")
 
 TRUE_SHOT_TOTAL = 231 # according to sportsreference
 
-###################################################################################
-#  Part II: Calculate arc length of shot vs. distance to basketball        
-###################################################################################
-def ball_in_air(moment, ball_location, threshold=2):
-    # Loc_info is info of ball + players
-    loc_info = moment[5]
-    # Loop through all players, if any are within 'threshold' feet of ball, 
-    for i in range(1, 10):
-        player_info = loc_info[i]
-        player_location = Location(player_info[2], player_info[3], player_info[4])
-        if euclid_distance(player_location, ball_location) < threshold:
-            return False
-    return True
-shot_arc_information = []
-shots_found = 0
-# shots_not_found = shot_times.copy()
-for event in all_data["events"]:
-    for i, moment in enumerate(event["moments"]):
-        ball_info = moment[5][0]
-        ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-        if is_shot(ball_location):
-            try: 
-                if abs(seconds_since_start(quarter=moment[0], seconds_left=moment[2]) - shot_times[shots_found]) < 1:
-                    # print("Found a new shot", shots_found, "shots found")
-                    shots_found += 1
-                    in_air = True
-                    ball_arc_information = []
-                    # Go back in time until ball is in the hands of a player
-                    try: 
-                        # Loop while ball is in the air otherwise, we assume ball 
-                        #  is in the hands of the shooter, so we stop taking in measurements
-                        while in_air:
-                            # The ball location is really what we care about here.
-                            ball_arc_information.append(ball_location)
-                            # Go back in time by 1 moment, if ball is still in air, then
-                            #   we are at beginning of loop and we take another measurement
-                            #   of its location.
-                            past_moment = event["moments"][i]
-                            ball_info = past_moment[5][0]
-                            ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-                            in_air:bool = ball_in_air(past_moment, ball_location)
-                            i -= 1
-                        shot_arc_information.append(ball_arc_information)
-                    except IndexError:
-                        shot_arc_information.append(ball_arc_information)
-                        continue
-            except IndexError:
-                print("Found all shots")
-                break
+# ###################################################################################
+# #  Part II: Calculate arc length of shot vs. distance to basketball        
+# ###################################################################################
+# def ball_in_air(moment, ball_location, threshold=2):
+#     # Loc_info is info of ball + players
+#     loc_info = moment[5]
+#     # Loop through all players, if any are within 'threshold' feet of ball, 
+#     for i in range(1, 10):
+#         player_info = loc_info[i]
+#         player_location = Location(player_info[2], player_info[3], player_info[4])
+#         if euclid_distance(player_location, ball_location) < threshold:
+#             return False
+#     return True
+# shot_arc_information = []
+# shots_found = 0
+# # shots_not_found = shot_times.copy()
+# for event in all_data["events"]:
+#     for i, moment in enumerate(event["moments"]):
+#         ball_info = moment[5][0]
+#         ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+#         if is_shot(ball_location):
+#             try: 
+#                 if abs(seconds_since_start(quarter=moment[0], seconds_left=moment[2]) - shot_times[shots_found]) < 1:
+#                     # print("Found a new shot", shots_found, "shots found")
+#                     shots_found += 1
+#                     in_air = True
+#                     ball_arc_information = []
+#                     # Go back in time until ball is in the hands of a player
+#                     try: 
+#                         # Loop while ball is in the air otherwise, we assume ball 
+#                         #  is in the hands of the shooter, so we stop taking in measurements
+#                         while in_air:
+#                             # The ball location is really what we care about here.
+#                             ball_arc_information.append(ball_location)
+#                             # Go back in time by 1 moment, if ball is still in air, then
+#                             #   we are at beginning of loop and we take another measurement
+#                             #   of its location.
+#                             past_moment = event["moments"][i]
+#                             ball_info = past_moment[5][0]
+#                             ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+#                             in_air:bool = ball_in_air(past_moment, ball_location)
+#                             i -= 1
+#                         shot_arc_information.append(ball_arc_information)
+#                     except IndexError:
+#                         shot_arc_information.append(ball_arc_information)
+#                         continue
+#             except IndexError:
+#                 print("Found all shots")
+#                 break
+# ###################################################################################
+# #  This little section is purely for sanity check
+# # Calculate the arc length of the shot
+# shot_path = shot_arc_information[1]
+# arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+# # Calculate the straight-line distance from the start to the end of the shot
+# straight_line_distance = shot_path[0].distance_to(shot_path[-1])
+# print(f"Arc Length: {arc_length:.2f}")
+# print(f"Straight-line Distance: {straight_line_distance:.2f}")
+# ###################################################################################
 
-# Calculate the arc length of the shot
-shot_path = shot_arc_information[1]
-arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
 
-# Calculate the straight-line distance from the start to the end of the shot
-straight_line_distance = shot_path[0].distance_to(shot_path[-1])
-
-print(f"Arc Length: {arc_length:.2f}")
-print(f"Straight-line Distance: {straight_line_distance:.2f}")
-
-def calculate_arc_length(shot_path):
-    """
-    Calculate the arc length for a given shot path.
+# def calculate_arc_length(shot_path):
+#     """
+#     Calculate the arc length for a given shot path.
     
-    Args:
-    - shot_path: An iterable of Location objects.
+#     Args:
+#     - shot_path: A list Location objects.
 
-    Returns:
-    - The total arc length of the path.
-    """
-    return sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+#     Returns:
+#     - The total arc length of the path.
+#     """
+#     return sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
 
-# Now, apply this function to each shot path in your array
-arc_lengths = np.array([calculate_arc_length(shot) for shot in shot_arc_information])
-print(len(arc_lengths))
-print(len(shot_times))
+# arc_lengths = np.array([calculate_arc_length(shot) for shot in shot_arc_information])
+# print(len(arc_lengths))
+# print(len(shot_times))
 
 # Now that we have our shot times, let's figure out our accuracy and sensitivity
 #   Confusion matrix (according to event dataset)
@@ -243,6 +257,8 @@ def omitted1():
 
     event_data = event_data[['PERIOD', 'PCTIMESTRING', 'ACTIONS']]
 
+    return event_data
+
 ###################################################################################
 ## Convert the PCTIMESTRING column into ELAPSED_SECS (seconds since start) column #
 ###################################################################################
@@ -261,7 +277,9 @@ def omitted3(event_data):
     # Take new calculations, put into elapsed time column, drop the PCTIMESTRING column
     event_data['ELAPSED_SECS'] = seconds
     event_data = event_data[['PERIOD', 'ELAPSED_SECS', 'ACTIONS']]
+    
     event_data.to_csv("event_data.csv", index=False)
+    return event_data
 
 ###################################################################################
 ## Filter the dataframe for actions that are shots (either misses or makes) 
@@ -288,6 +306,7 @@ def omitted2(event_data):
             diffs = np.abs(array_b - value_a)
             # Find indices in array_b where the difference is within the tolerance
             close_indices = np.where(diffs <= tolerance)[0]
+            print(close_indices, "\n")
             if len(close_indices) > 0:
                 # If there are close matches, record the indices
                 matches_in_a.add(i)
@@ -308,7 +327,12 @@ def omitted2(event_data):
     shots_df_elapsed_secs_list = shots_df["ELAPSED_SECS"].tolist()
 
     # Find unmatched elements with the updated criteria
+    # Shot_times is sportsvu data
     false_positives, shots_not_captured = find_approx_matches(shot_times, shots_df_elapsed_secs_list, tolerance=3)
 
     print("Found", len(false_positives), "shots from data that are not close to any in sportsreference")
     print("Failed to find", len(shots_not_captured), "shots according to sportsreference that are close to any in data")
+
+# event_data = omitted1()
+# event_data = omitted3(event_data)
+# omitted2(event_data)
