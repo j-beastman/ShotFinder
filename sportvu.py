@@ -55,11 +55,11 @@ shot_times_the_list = []
 for event in all_data["events"]:
     # Amount to skip will help us differentiate between different shots.
     #   A shot overlaps between a bunch of different moment, and we don't want to overcount.
-    amount_to_skip, j = 0, 0
+    j = 0
     # Iterate through the current moment.
     while j < len(event["moments"]) - 1:
         moment = event["moments"][j]
-        amount_to_skip = 0
+        # amount_to_skip = 0
         # Get the location of the ball
         ball_info = moment[5][0]
         ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
@@ -72,36 +72,31 @@ for event in all_data["events"]:
                 shot_times_the_list.append((seconds, moment[1]))
                 # if the next moment is a shot, we want to skip over that.
                 inside_shot_threshold = True
-                home = 1
                 #  we want to iterate through the current moments array 
                 #   until we find the next moment that is not a shot (according to our is_shot function)
-                while inside_shot_threshold and ((j + amount_to_skip) < len(event["moments"]) - 1):
-                    amount_to_skip += 1
+                while inside_shot_threshold and (j < len(event["moments"]) - 1):
+                    j += 1
                     # Grab new moment
-                    new_moment = event["moments"][j + amount_to_skip]
+                    new_moment = event["moments"][j]
                     # Get new location of the ball in this new moment
                     new_ball_info = new_moment[5][0]
                     new_ball_location = Location(new_ball_info[2], new_ball_info[3], new_ball_info[4])
                     # If it is not a shot, we wanna get outta this loop
-                    if not is_shot(new_ball_location):
-                        inside_shot_threshold = False
-                j = j + amount_to_skip
-            else:
-                j += 1
-        else:
-            j += 1
+                    if is_shot(new_ball_location):
+                        continue
+                    else:
+                        break
+        j += 1
 ################################################################################## 
 #### It should be sorted already, but it's not, so this isn't a good fix #########
 ################################################################################## 
 shot_times = np.array(shot_times_the_list)
+print(shot_times[550:])
 sorted_indices = np.argsort(shot_times[:, 0])
 
 # Use the sorted indices to sort the entire array
 shot_times = shot_times[sorted_indices]
 
-# print(shot_times[:20])
-# print(shot_times.shape)
-# shot_time
 # So, right now the array has all of the moments which are shots,
 #   but the issue is that the moments are very close to each other in time
 #   so, we have about 5x as many shots as there actually were in the game.
