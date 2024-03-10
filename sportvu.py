@@ -72,7 +72,7 @@ for event in all_data["events"]:
                 shot_times_the_list.append((seconds, moment[1]))
                 # if the next moment is a shot, we want to skip over that.
                 inside_shot_threshold = True
-                #  we want to iterate through the current moments array 
+                #  We want to iterate through the current moments array 
                 #   until we find the next moment that is not a shot (according to our is_shot function)
                 while inside_shot_threshold and (j < len(event["moments"]) - 1):
                     j += 1
@@ -122,12 +122,12 @@ while i < len(shot_times) - 1:
         print(current_group)
     # Calculate the average of the current group
     avg = int(np.mean(current_group))
+    if avg == 215:
+        print(current_group)
+        print(shot_times[i : (i + 1)], "THIS ONE", i)
     averages.append(avg)
     i += 1
-    # print(i)
-    if i == (567) or i == 565 or i == 564:
-        print('hllo')
-        print(current_group)
+    
 
 # Each shot is accounted for but it doesn't reflect any exact moment of either
 #   when the shot was taken or when the shot missed or went in.
