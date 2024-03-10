@@ -23,7 +23,7 @@ class Location:
 BUCKET_HOME = Location(5.25, 25, 10)
 BUCKET_AWAY = Location(88.75, 25, 10)
 HALF_COURT = 45
-DISTANCE_THRESHOLD_FOR_SHOT = 4
+DISTANCE_THRESHOLD_FOR_SHOT = 1.5
 
 def euclid_distance(object1 : Location, object2 : Location):
     return math.sqrt((object1.X - object2.X) ** 2 + (object1.Y - object2.Y) ** 2)
@@ -43,32 +43,65 @@ def is_shot(Ball):
 def seconds_since_start(quarter, seconds_left):
     return ((quarter - 1) * 720) + (720 - seconds_left)
 
-
+# Open up the SportsVu data
 with open('0021500495.json', 'r') as file:
     all_data = json.load(file)
 
-# These are the two arrays that you need to populate with actual data
-shot_times_the_list = []
 
 # Loops through the SportsVu data, if the ball height is above rim, 
 #   we can safely classify if it is a shot or not.
-for i, event in enumerate(all_data["events"]):
-    for moment in event["moments"]:
+shot_times_the_list = []
+# Loop through each event
+for event in all_data["events"]:
+    # Amount to skip will help us differentiate between different shots.
+    #   A shot overlaps between a bunch of different moment, and we don't want to overcount.
+    amount_to_skip, j = 0, 0
+    # Iterate through the current moment.
+    while j < len(event["moments"]) - 1:
+        moment = event["moments"][j]
+        amount_to_skip = 0
+        # Get the location of the ball
         ball_info = moment[5][0]
         ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+        # If the ball is above the rim, it has the potential to be a shot.
         if ball_location.Z > 10:
+            # If it is a shot,
             if is_shot(ball_location):
+                # First, we append the current seconds since start of game and the current timestamp in milliseconds 
                 seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
                 shot_times_the_list.append((seconds, moment[1]))
-                
-                
-
-# sheeet we getting fucked up on free throws
-
+                # if the next moment is a shot, we want to skip over that.
+                inside_shot_threshold = True
+                home = 1
+                #  we want to iterate through the current moments array 
+                #   until we find the next moment that is not a shot (according to our is_shot function)
+                while inside_shot_threshold and ((j + amount_to_skip) < len(event["moments"]) - 1):
+                    amount_to_skip += 1
+                    # Grab new moment
+                    new_moment = event["moments"][j + amount_to_skip]
+                    # Get new location of the ball in this new moment
+                    new_ball_info = new_moment[5][0]
+                    new_ball_location = Location(new_ball_info[2], new_ball_info[3], new_ball_info[4])
+                    # If it is not a shot, we wanna get outta this loop
+                    if not is_shot(new_ball_location):
+                        inside_shot_threshold = False
+                j = j + amount_to_skip
+            else:
+                j += 1
+        else:
+            j += 1
+################################################################################## 
+#### It should be sorted already, but it's not, so this isn't a good fix #########
+################################################################################## 
 shot_times = np.array(shot_times_the_list)
-print(shot_times[:20])
-print(shot_times.shape)
+sorted_indices = np.argsort(shot_times[:, 0])
 
+# Use the sorted indices to sort the entire array
+shot_times = shot_times[sorted_indices]
+
+# print(shot_times[:20])
+# print(shot_times.shape)
+# shot_time
 # So, right now the array has all of the moments which are shots,
 #   but the issue is that the moments are very close to each other in time
 #   so, we have about 5x as many shots as there actually were in the game.
@@ -89,10 +122,17 @@ while i < len(shot_times) - 1:
         i += 1
         # Append the seconds since game start
         current_group.append(shot_times[i][0])
+    if i == (len(shot_times) - 2):
+        print('hllo')
+        print(current_group)
     # Calculate the average of the current group
     avg = int(np.mean(current_group))
     averages.append(avg)
     i += 1
+    # print(i)
+    if i == (567) or i == 565 or i == 564:
+        print('hllo')
+        print(current_group)
 
 # Each shot is accounted for but it doesn't reflect any exact moment of either
 #   when the shot was taken or when the shot missed or went in.
@@ -100,6 +140,9 @@ while i < len(shot_times) - 1:
 
 # The resulting array of averages
 shot_times = np.array(averages)
+
+df = pd.DataFrame(shot_times)
+df.to_csv("Overcountingshots.csv")
 
 shot_facts = np.arange(0, len(shot_times), 1)
 arc_lengths = shot_facts
@@ -192,31 +235,31 @@ TRUE_SHOT_TOTAL = 231 # according to sportsreference
 # This code creates the timeline display from the shot_times
 # and shot_facts arrays.
 # DO NOT MODIFY THIS CODE APART FROM THE SHOT FACT LABEL
-fig, ax = plt.subplots(figsize=(12,3))
-fig.canvas.manager.set_window_title('Shot Timeline')
+# fig, ax = plt.subplots(figsize=(12,3))
+# fig.canvas.manager.set_window_title('Shot Timeline')
 
-plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
-plt.bar(shot_times, arc_lengths, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
+# plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
+# plt.bar(shot_times, arc_lengths, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
 
-ax.spines['bottom'].set_position('zero')
-ax.spines['top'].set_color('none')
-ax.spines['right'].set_color('none')
-ax.spines['left'].set_color('none')
-ax.tick_params(axis='x', length=20)
-ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator([0,720,1440,2160,2880])) 
-ax.set_yticks([])
+# ax.spines['bottom'].set_position('zero')
+# ax.spines['top'].set_color('none')
+# ax.spines['right'].set_color('none')
+# ax.spines['left'].set_color('none')
+# ax.tick_params(axis='x', length=20)
+# ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator([0,720,1440,2160,2880])) 
+# ax.set_yticks([])
 
-_, xmax = ax.get_xlim()
-ymin, ymax = ax.get_ylim()
-ax.set_xlim(-15, xmax)
-ax.set_ylim(ymin, ymax+5)
-ax.text(xmax, 2, "time", ha='right', va='top', size=10)
-plt.legend(ncol=5, loc='upper left')
+# _, xmax = ax.get_xlim()
+# ymin, ymax = ax.get_ylim()
+# ax.set_xlim(-15, xmax)
+# ax.set_ylim(ymin, ymax+5)
+# ax.text(xmax, 2, "time", ha='right', va='top', size=10)
+# plt.legend(ncol=5, loc='upper left')
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
-plt.savefig("Shot_Timeline.png")
+# plt.savefig("Shot_Timeline.png")
 
 ###################################################################################
 # Below is omitted code which we used to figure out our false positives/negatives
