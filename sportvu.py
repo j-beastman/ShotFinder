@@ -23,7 +23,7 @@ class Location:
 BUCKET_HOME = Location(5.25, 25, 10)
 BUCKET_AWAY = Location(88.75, 25, 10)
 HALF_COURT = 45
-DISTANCE_THRESHOLD_FOR_SHOT = 1.5
+DISTANCE_THRESHOLD_FOR_SHOT = 2
 
 def euclid_distance(object1 : Location, object2 : Location):
     return math.sqrt((object1.X - object2.X) ** 2 + (object1.Y - object2.Y) ** 2)
@@ -36,114 +36,101 @@ def is_shot(Ball):
                                     + ((Ball.Y - BUCKET_HOME.Y) ** 2) + ((Ball.Z - BUCKET_HOME.Z) ** 2))
     else:
         euclid_distance = math.sqrt(((Ball.X - BUCKET_AWAY.X) ** 2)
-                                    + ((Ball.Y - BUCKET_AWAY.Y) **2 ) + ((Ball.Z - BUCKET_AWAY.Z) ** 2))
+                                    + ((Ball.Y - BUCKET_AWAY.Y) ** 2) + ((Ball.Z - BUCKET_AWAY.Z) ** 2))
     return euclid_distance <= DISTANCE_THRESHOLD_FOR_SHOT
 
 # Used to determine time since start
 def seconds_since_start(quarter, seconds_left):
     return ((quarter - 1) * 720) + (720 - seconds_left)
 
-# Open up the SportsVu data
-with open('0021500495.json', 'r') as file:
-    all_data = json.load(file)
+####################################################################################
+##  Convert raw data into something more usable 
+####################################################################################
+# # Open up the SportsVu data
+# with open('0021500495.json', 'r') as file:
+#     sportVU = json.load(file)
+
+# # Organize data!
+# all_moments = []
+
+# # Iterate through each event
+# for event in sportVU['events']:
+#     # Iterate through each moment in the event and extend the all_moments list
+#     for moment in event['moments']:
+#         if moment not in all_moments:
+#             all_moments.append(moment)
+
+# # Specify the file path where you want to save the JSON file
+# file_path = "output.json"
+
+# # Write the list to a JSON file
+# with open(file_path, 'w') as json_file:
+#     json.dump(all_moments, json_file)
 
 
-# Loops through the SportsVu data, if the ball height is above rim, 
-#   we can safely classify if it is a shot or not.
-shot_times_the_list = []
-# Loop through each event
-for event in all_data["events"]:
-    # Amount to skip will help us differentiate between different shots.
-    #   A shot overlaps between a bunch of different moment, and we don't want to overcount.
-    j = 0
-    # Iterate through the current moment.
-    while j < len(event["moments"]) - 1:
-        moment = event["moments"][j]
-        # amount_to_skip = 0
-        # Get the location of the ball
-        ball_info = moment[5][0]
-        ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-        # If the ball is above the rim, it has the potential to be a shot.
-        if ball_location.Z > 10:
-            # If it is a shot,
-            if is_shot(ball_location):
-                # First, we append the current seconds since start of game and the current timestamp in milliseconds 
-                seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
-                shot_times_the_list.append((seconds, moment[1]))
-                # if the next moment is a shot, we want to skip over that.
+# Now, we just read from our moments json file (the cleaned up one)
+with open("output.json", 'r') as json_file:
+    all_moments = json.load(json_file)
+
+
+shot_times_list = []
+skip_to_index = 0
+index_of_list = -1
+shot_found = False
+for index, moment in enumerate(all_moments):
+    if index < skip_to_index:
+        continue
+    skip_to_index = index
+    ball_info = moment[5][0]
+    ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
+    # If the ball is above the rim, it has the potential to be a shot.
+    if ball_location.Z > 10:
+        # If it is a shot,
+        if is_shot(ball_location):
+            seconds = seconds_since_start(quarter=moment[0], seconds_left=moment[2])
+            timestamp = moment[1]
+            if not shot_found:
+                shot_times_list.append((seconds, timestamp))
+                shot_found = True
+            elif any(timestamp == shot_time[1] for shot_time in shot_times_list) or (
+                                    abs(shot_times_list[index_of_list][1] - timestamp) < 1000):
+                continue
+            else:
+                shot_times_list.append((seconds, timestamp))
+                index_of_list += 1
                 inside_shot_threshold = True
-                #  We want to iterate through the current moments array 
-                #   until we find the next moment that is not a shot (according to our is_shot function)
-                while inside_shot_threshold and (j < len(event["moments"]) - 1):
-                    j += 1
+                while inside_shot_threshold:
                     # Grab new moment
-                    new_moment = event["moments"][j]
-                    # Get new location of the ball in this new moment
+                    skip_to_index += 1
+                    new_moment = all_moments[skip_to_index]
                     new_ball_info = new_moment[5][0]
                     new_ball_location = Location(new_ball_info[2], new_ball_info[3], new_ball_info[4])
                     # If it is not a shot, we wanna get outta this loop
                     if is_shot(new_ball_location):
-                        continue
+                        skip_to_index += 1
                     else:
-                        break
-        j += 1
+                        inside_shot_threshold = False
+
+
+
 ################################################################################## 
 #### It should be sorted already, but it's not, so this isn't a good fix #########
 ################################################################################## 
-shot_times = np.array(shot_times_the_list)
-print(shot_times[550:])
-sorted_indices = np.argsort(shot_times[:, 0])
+shot_times = np.array(shot_times_list)
+print("Found", len(shot_times), "shots")
+TRUE_SHOT_TOTAL = 231 # according to sportsreference
+print("Failed to find", (TRUE_SHOT_TOTAL - len(shot_times)), "shots!")
 
-# Use the sorted indices to sort the entire array
-shot_times = shot_times[sorted_indices]
-
-# So, right now the array has all of the moments which are shots,
-#   but the issue is that the moments are very close to each other in time
-#   so, we have about 5x as many shots as there actually were in the game.
-#   We're going to group the numbers that are close together (within 1 second)
-#       and 
-grouping_threshold = 1.5 * 1000 # convert milliseconds to seconds
-
-# Group numbers and calculate averages
-averages = []
-i = 0
-while i < len(shot_times) - 1:
-    # Start a new group with the current timestamp.
-    current_group = [shot_times[i][0]]
-    # Look ahead to the next numbers and add them to the group if they're within the threshold
-    #   We compare based on timestamp, not on seconds since start
-    while ((i + 1) < len(shot_times)) and abs(shot_times[i + 1][1] 
-                                                - shot_times[i][1]) <= grouping_threshold:
-        i += 1
-        # Append the seconds since game start
-        current_group.append(shot_times[i][0])
-    if i == (len(shot_times) - 2):
-        print('hllo')
-        print(current_group)
-    # Calculate the average of the current group
-    avg = int(np.mean(current_group))
-    if avg == 215:
-        print(current_group)
-        print(shot_times[i : (i + 1)], "THIS ONE", i)
-    averages.append(avg)
-    i += 1
-    
-
-# Each shot is accounted for but it doesn't reflect any exact moment of either
-#   when the shot was taken or when the shot missed or went in.
-
-
-# The resulting array of averages
-shot_times = np.array(averages)
-
-df = pd.DataFrame(shot_times)
-df.to_csv("Overcountingshots.csv")
+# Code to print out shots (game time, realtime, from our array
+# testing = shot_times[:-5]
+# for i, item in enumerate(shot_times):
+#     for value in item:
+#         print("{:.1f}".format(value), end=' ')
+#     print("Shot number", i)
 
 shot_facts = np.arange(0, len(shot_times), 1)
 arc_lengths = shot_facts
-print("Found", len(shot_times), "shots")
 
-TRUE_SHOT_TOTAL = 231 # according to sportsreference
 
 # ###################################################################################
 # #  Part II: Calculate arc length of shot vs. distance to basketball        
