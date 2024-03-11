@@ -110,12 +110,22 @@ print("Found", len(shot_times), "shots")
 # takes array of shot times where each time is seconds since start of game
 # returns array where each time has been converted to time left in quarter
 # i.e. minutes:seconds format
-# def convert_time_since_start_to_pc_timestamp(shot_times):
-#     i = 0
-#     while i < len(shot_times):
-#         curr_shot = shot_times[i]
-#         minutes_left = curr_shot 
-#         i += 1
+def convert_to_quarter_seconds(shot_times):
+    quarter_seconds_shot_times = []
+    i = 0
+    while i < len(shot_times):
+        curr_time = shot_times[i]
+        quarter = (curr_time // 720) + 1
+        seconds_left_in_quarter = 720 - (curr_time % 720)
+        minutes_left = seconds_left_in_quarter // 60
+        seconds_left_in_minute = seconds_left_in_quarter - (minutes_left * 60)
+        quarter_seconds_shot_times.append(f"quarter: {quarter} time left: {minutes_left}:{seconds_left_in_minute}")
+        i += 1
+    return np.array(quarter_seconds_shot_times)
+
+print(convert_to_quarter_seconds(shot_times))
+
+
 
 
 
