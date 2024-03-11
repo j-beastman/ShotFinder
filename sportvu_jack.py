@@ -107,6 +107,15 @@ print(shot_times)
 
 print("Found", len(shot_times), "shots")
 
+# takes array of shot times where each time is seconds since start of game
+# returns array where each time has been converted to time left in quarter
+# i.e. minutes:seconds format
+# def convert_time_since_start_to_pc_timestamp(shot_times):
+#     i = 0
+#     while i < len(shot_times):
+#         curr_shot = shot_times[i]
+#         minutes_left = curr_shot 
+#         i += 1
 
 
 
