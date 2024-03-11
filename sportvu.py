@@ -199,12 +199,25 @@ for location_tuple in distance:
     distance = location_tuple[0].distance_to(location_tuple[1])
     distances.append(distance)
 
-print(max(distances))
+filtered_distances = [d for d in distances if d <= 30]
+def get_bucket(number):
+    # Align range starting from 0 and find the bucket
+    bucket_index = (number - 1) // 3
+    return bucket_index + 1  # Return the bucket number (1-based indexing)
+
+# Example usage:
+buckets = [get_bucket(number) for number in filtered_distances]
+scaled_distances = buckets
+
+# Find indices of elements larger than 30
+indices = [index for index, value in enumerate(distances) if value < 30]
+
+print("Indices of elements larger than 30:", indices)
 
 # Map through the shot_times array to get the shot times in relation to game clock
 #   rather than the timestamp
 shot_times = list(map(lambda x: x[0], shot_times))
-
+shot_times = [shot_times[i] for i in indices]
 ####################################################################################
 # Below is given code          
 ###################################################################################
@@ -215,7 +228,7 @@ fig, ax = plt.subplots(figsize=(12,3))
 fig.canvas.manager.set_window_title('Shot Timeline')
 
 plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
-plt.bar(shot_times, distances, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
+plt.bar(shot_times, scaled_distances, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
 
 ax.spines['bottom'].set_position('zero')
 ax.spines['top'].set_color('none')
