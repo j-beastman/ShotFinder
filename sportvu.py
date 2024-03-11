@@ -141,7 +141,7 @@ arc_lengths = shot_facts
 ####################################################################################
 ##  Part II: Calculate arc length of shot vs. distance to basketball        
 ####################################################################################
-def ball_in_air(moment, ball_location, threshold=1):
+def ball_in_air(moment, ball_location, threshold=3):
     # Loc_info is info of ball + players
     loc_info = moment[5]
     # Loop through all players, if any are within 'threshold' feet of ball, 
@@ -181,11 +181,8 @@ for timestamp in timestamps:
     ball_arc_information.append(ball_location)
     in_air = True
     index_to_reverse = 1
+    # Go back in time until the ball is the hands of a player.
     while in_air:
-        # The ball location is really what we care about here.
-        # Go back in time by 1 moment, if ball is still in air, then
-        #   we are at beginning of loop and we take another measurement
-        #   of its location.
         past_moment = all_moments[index - index_to_reverse]
         past_ball_location = get_ball_location(past_moment)
         in_air:bool = ball_in_air(past_moment, past_ball_location)
