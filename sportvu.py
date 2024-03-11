@@ -15,7 +15,7 @@ class Location:
         self.Z = Z
 
     def distance_to(self, other):
-        return math.sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2 + (self.Z - other.Z) ** 2)
+        return math.sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2)
 
 
 # Define the locations
@@ -141,88 +141,76 @@ arc_lengths = shot_facts
 ####################################################################################
 ##  Part II: Calculate arc length of shot vs. distance to basketball        
 ####################################################################################
-def ball_in_air(moment, ball_location, threshold=2):
+def ball_in_air(moment, ball_location, threshold=1):
     # Loc_info is info of ball + players
     loc_info = moment[5]
     # Loop through all players, if any are within 'threshold' feet of ball, 
-    for i in range(1, 10):
-        player_info = loc_info[i]
-        player_location = Location(player_info[2], player_info[3], player_info[4])
-        if euclid_distance(player_location, ball_location) < threshold:
-            return False
+    try:
+        for i in range(1, 10):
+            print(i)
+            player_info = loc_info[i]
+            player_location = Location(player_info[2], player_info[3], player_info[4])
+            if euclid_distance(player_location, ball_location) < threshold:
+                return False
+    except IndexError:
+        print("This moment is messed up")
     return True
 
-shot_arc_information = []
-shots_found = 0
-for index, moment in enumerate(all_moments):
+def get_ball_location(moment):
     ball_info = moment[5][0]
-    ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-    if is_shot(ball_location):
-        try: 
-            if abs(seconds_since_start(quarter=moment[0], seconds_left=moment[2]
-                                       ) - shot_times[shots_found][0]) < 1:
-                print("Found a new shot", shots_found, "shots found")
-                shots_found += 1
-                in_air = True
-                ball_arc_information = []
-                # Go back in time until ball is in the hands of a player
-                try: 
-                    # Loop while ball is in the air otherwise, we assume ball 
-                    #  is in the hands of the shooter, so we stop taking in measurements
-                    i = 0
-                    while in_air:
-                        # The ball location is really what we care about here.
-                        ball_arc_information.append(ball_location)
-                        # Go back in time by 1 moment, if ball is still in air, then
-                        #   we are at beginning of loop and we take another measurement
-                        #   of its location.
-                        past_moment = all_moments[index - i]
-                        ball_info = past_moment[5][0]
-                        ball_location = Location(ball_info[2], ball_info[3], ball_info[4])
-                        in_air:bool = ball_in_air(past_moment, ball_location)
-                        i += 1
-                    shot_arc_information.append(ball_arc_information)
-                except IndexError:
-                    shot_arc_information.append(ball_arc_information)
-                    continue
-        except IndexError:
-            print("Found all shots")
-            break
+    return Location(ball_info[2], ball_info[3], ball_info[4])
 
-# ###################################################################################
-# #  This little section is purely for sanity check
-# Calculate the arc length of the shot
-shot_path = shot_arc_information[1]
-arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
-# Calculate the straight-line distance from the start to the end of the shot
-straight_line_distance = shot_path[0].distance_to(shot_path[-1])
-print(f"Arc Length: {arc_length:.2f}")
-print(f"Straight-line Distance: {straight_line_distance:.2f}")
-# ###################################################################################
+distance = []
+shots_found = 0
+index_in_all_moments = 0
+timestamps = [shot[1] for shot in shot_times]
+index = 0
+for timestamp in timestamps:
+    timestamp_not_found = True
+    # Iterate through moments array until we find the timestamp
+    while timestamp_not_found:
+        # Did we find the moment when the shot occurred?
+        if timestamp == all_moments[index][1]:
+            timestamp_not_found = False
+        else:
+            index += 1
+    moment_of_shot = all_moments[index]
+    ball_location = get_ball_location(moment_of_shot)
+
+    ball_arc_information = []
+    ball_arc_information.append(ball_location)
+    in_air = True
+    index_to_reverse = 1
+    while in_air:
+        # The ball location is really what we care about here.
+        # Go back in time by 1 moment, if ball is still in air, then
+        #   we are at beginning of loop and we take another measurement
+        #   of its location.
+        past_moment = all_moments[index - index_to_reverse]
+        past_ball_location = get_ball_location(past_moment)
+        in_air:bool = ball_in_air(past_moment, past_ball_location)
+        index_to_reverse += 1
+    ball_arc_information.append(past_ball_location)
+    distance.append(ball_arc_information)
 
 
-def calculate_arc_length(shot_path):
-    """
-    Calculate the arc length for a given shot path.
-    
-    Args:
-    - shot_path: A list Location objects.
+# List to store distances
+distances = []
 
-    Returns:
-    - The total arc length of the path.
-    """
-    return sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+# Calculate distances for each tuple of Location objects
+for location_tuple in distance:
+    distance = location_tuple[0].distance_to(location_tuple[1])
+    distances.append(distance)
 
-arc_lengths = np.array([calculate_arc_length(shot) for shot in shot_arc_information])
-print(len(arc_lengths))
-print(len(shot_times))
+print(max(distances))
 
+# Map through the shot_times array to get the shot times in relation to game clock
+#   rather than the timestamp
 shot_times = list(map(lambda x: x[0], shot_times))
-# Now that we have our shot times, let's figure out our accuracy and sensitivity
-#   Confusion matrix (according to event dataset)
-# freethrowy poo
 
-
+####################################################################################
+# Below is given code          
+###################################################################################
 # This code creates the timeline display from the shot_times
 # and shot_facts arrays.
 # DO NOT MODIFY THIS CODE APART FROM THE SHOT FACT LABEL
@@ -230,7 +218,7 @@ fig, ax = plt.subplots(figsize=(12,3))
 fig.canvas.manager.set_window_title('Shot Timeline')
 
 plt.scatter(shot_times, np.full_like(shot_times, 0), marker='o', s=50, color='royalblue', edgecolors='black', zorder=3, label='shot')
-plt.bar(shot_times, arc_lengths, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
+plt.bar(shot_times, distances, bottom=2, color='royalblue', edgecolor='black', width=5, label='shot fact') # <- This is the label you can modify
 
 ax.spines['bottom'].set_position('zero')
 ax.spines['top'].set_color('none')
