@@ -119,9 +119,9 @@ for index, moment in enumerate(all_moments):
 
 
 
-################################################################################## 
-#### It should be sorted already, but it's not, so this isn't a good fix #########
-################################################################################## 
+########################################
+#### How good was our program? #########
+########################################
 shot_times = np.array(shot_times_list)
 print("Found", len(shot_times), "shots")
 TRUE_SHOT_TOTAL = 231 # according to sportsreference
@@ -138,9 +138,9 @@ shot_facts = np.arange(0, len(shot_times), 1)
 arc_lengths = shot_facts
 
 
-# ###################################################################################
-# #  Part II: Calculate arc length of shot vs. distance to basketball        
-# ###################################################################################
+####################################################################################
+##  Part II: Calculate arc length of shot vs. distance to basketball        
+####################################################################################
 def ball_in_air(moment, ball_location, threshold=2):
     # Loc_info is info of ball + players
     loc_info = moment[5]
@@ -188,15 +188,16 @@ for index, moment in enumerate(all_moments):
         except IndexError:
             print("Found all shots")
             break
+
 # ###################################################################################
 # #  This little section is purely for sanity check
-# # Calculate the arc length of the shot
-# shot_path = shot_arc_information[1]
-# arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
-# # Calculate the straight-line distance from the start to the end of the shot
-# straight_line_distance = shot_path[0].distance_to(shot_path[-1])
-# print(f"Arc Length: {arc_length:.2f}")
-# print(f"Straight-line Distance: {straight_line_distance:.2f}")
+# Calculate the arc length of the shot
+shot_path = shot_arc_information[1]
+arc_length = sum(shot_path[i].distance_to(shot_path[i+1]) for i in range(len(shot_path)-1))
+# Calculate the straight-line distance from the start to the end of the shot
+straight_line_distance = shot_path[0].distance_to(shot_path[-1])
+print(f"Arc Length: {arc_length:.2f}")
+print(f"Straight-line Distance: {straight_line_distance:.2f}")
 # ###################################################################################
 
 
